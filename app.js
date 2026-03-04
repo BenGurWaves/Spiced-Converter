@@ -7,7 +7,6 @@
   'use strict';
 
   // ── Converter Definitions ──────────────────────────
-  // engine: 'ffmpeg' | 'canvas' | 'heic' | 'coming-soon'
   const CONVERTERS = {
     audio: [
       { id: 'mp4-to-mp3',   from: 'MP4',  to: 'MP3',  accept: '.mp4,video/mp4',                       engine: 'ffmpeg', codec: 'libmp3lame', ext: 'mp3', hasBitrate: true,  noVideo: true },
@@ -47,40 +46,34 @@
       { id: 'svg-to-png',   from: 'SVG',  to: 'PNG',  accept: '.svg,image/svg+xml',                   engine: 'canvas', outputMime: 'image/png',  ext: 'png' },
       { id: 'heic-to-jpg',  from: 'HEIC', to: 'JPG',  accept: '.heic,.heif,image/heic,image/heif',    engine: 'heic',   outputMime: 'image/jpeg', ext: 'jpg' },
       { id: 'gif-to-mp4',   from: 'GIF',  to: 'MP4',  accept: '.gif,image/gif',                       engine: 'ffmpeg', codec: 'aac', ext: 'mp4', hasBitrate: false, noVideo: false, videoCodec: 'libx264', audioCodec: 'aac', gifInput: true },
-      // Coming soon
-      { id: 'jpg-to-pdf',   from: 'JPG',  to: 'PDF',  accept: '.jpg,.jpeg',  engine: 'coming-soon' },
-      { id: 'pdf-to-jpg',   from: 'PDF',  to: 'JPG',  accept: '.pdf',        engine: 'coming-soon' },
-      { id: 'png-to-ico',   from: 'PNG',  to: 'ICO',  accept: '.png',        engine: 'coming-soon' },
-      { id: 'tiff-to-jpg',  from: 'TIFF', to: 'JPG',  accept: '.tiff,.tif',  engine: 'coming-soon' },
-      { id: 'image-to-pdf', from: 'Image',to: 'PDF',  accept: 'image/*',     engine: 'coming-soon' },
-      { id: 'pdf-to-images',from: 'PDF',  to: 'Images',accept: '.pdf',       engine: 'coming-soon' },
+      { id: 'jpg-to-pdf',   from: 'JPG',  to: 'PDF',  accept: '.jpg,.jpeg,image/jpeg',                engine: 'img2pdf', ext: 'pdf' },
+      { id: 'png-to-pdf',   from: 'PNG',  to: 'PDF',  accept: '.png,image/png',                       engine: 'img2pdf', ext: 'pdf' },
+      { id: 'png-to-ico',   from: 'PNG',  to: 'ICO',  accept: '.png,image/png',                       engine: 'ico',     ext: 'ico' },
+      { id: 'tiff-to-jpg',  from: 'TIFF', to: 'JPG',  accept: '.tiff,.tif,image/tiff',                engine: 'canvas', outputMime: 'image/jpeg', ext: 'jpg' },
+      { id: 'image-to-pdf', from: 'Image',to: 'PDF',  accept: 'image/*',                              engine: 'img2pdf', ext: 'pdf' },
+      { id: 'pdf-to-jpg',   from: 'PDF',  to: 'JPG',  accept: '.pdf,application/pdf',                 engine: 'pdfjs', outputMime: 'image/jpeg', ext: 'jpg' },
+      { id: 'pdf-to-png',   from: 'PDF',  to: 'PNG',  accept: '.pdf,application/pdf',                 engine: 'pdfjs', outputMime: 'image/png',  ext: 'png' },
     ],
     document: [
-      { id: 'pdf-to-word',  from: 'PDF',   to: 'DOCX',  accept: '.pdf',   engine: 'coming-soon' },
-      { id: 'word-to-pdf',  from: 'DOCX',  to: 'PDF',   accept: '.docx,.doc', engine: 'coming-soon' },
-      { id: 'pdf-to-excel', from: 'PDF',   to: 'XLSX',  accept: '.pdf',   engine: 'coming-soon' },
-      { id: 'excel-to-pdf', from: 'XLSX',  to: 'PDF',   accept: '.xlsx,.xls', engine: 'coming-soon' },
-      { id: 'pdf-to-pptx',  from: 'PDF',   to: 'PPTX',  accept: '.pdf',   engine: 'coming-soon' },
-      { id: 'pptx-to-pdf',  from: 'PPTX',  to: 'PDF',   accept: '.pptx,.ppt', engine: 'coming-soon' },
-      { id: 'pdf-to-txt',   from: 'PDF',   to: 'TXT',   accept: '.pdf',   engine: 'coming-soon' },
-      { id: 'rtf-to-docx',  from: 'RTF',   to: 'DOCX',  accept: '.rtf',   engine: 'coming-soon' },
-      { id: 'doc-to-pdf',   from: 'DOC',   to: 'PDF',   accept: '.doc',   engine: 'coming-soon' },
-      { id: 'pdf-to-html',  from: 'PDF',   to: 'HTML',  accept: '.pdf',   engine: 'coming-soon' },
-      { id: 'epub-to-pdf',  from: 'EPUB',  to: 'PDF',   accept: '.epub',  engine: 'coming-soon' },
-      { id: 'pdf-to-epub',  from: 'PDF',   to: 'EPUB',  accept: '.pdf',   engine: 'coming-soon' },
-      { id: 'csv-to-xlsx',  from: 'CSV',   to: 'XLSX',  accept: '.csv',   engine: 'coming-soon' },
-      { id: 'json-to-csv',  from: 'JSON',  to: 'CSV',   accept: '.json',  engine: 'coming-soon' },
-      { id: 'html-to-pdf',  from: 'HTML',  to: 'PDF',   accept: '.html,.htm', engine: 'coming-soon' },
-      { id: 'ppt-to-jpg',   from: 'PPT',   to: 'JPG',   accept: '.ppt,.pptx', engine: 'coming-soon' },
-      { id: 'rar-to-zip',   from: 'RAR',   to: 'ZIP',   accept: '.rar',   engine: 'coming-soon' },
-      { id: 'epub-to-mobi', from: 'EPUB',  to: 'MOBI',  accept: '.epub',  engine: 'coming-soon' },
+      { id: 'pdf-to-txt',   from: 'PDF',  to: 'TXT',  accept: '.pdf,application/pdf',                 engine: 'pdf-text', ext: 'txt' },
+      { id: 'pdf-to-html',  from: 'PDF',  to: 'HTML', accept: '.pdf,application/pdf',                 engine: 'pdf-text', ext: 'html' },
+      { id: 'pdf-to-word',  from: 'PDF',  to: 'DOCX', accept: '.pdf,application/pdf',                 engine: 'pdf-text', ext: 'docx' },
+      { id: 'word-to-pdf',  from: 'DOCX', to: 'PDF',  accept: '.docx,.doc',                           engine: 'mammoth', ext: 'pdf' },
+      { id: 'doc-to-pdf',   from: 'DOC',  to: 'PDF',  accept: '.doc',                                 engine: 'mammoth', ext: 'pdf' },
+      { id: 'csv-to-xlsx',  from: 'CSV',  to: 'XLSX', accept: '.csv,text/csv',                        engine: 'sheetjs', ext: 'xlsx' },
+      { id: 'json-to-csv',  from: 'JSON', to: 'CSV',  accept: '.json,application/json',               engine: 'json-csv', ext: 'csv' },
+      { id: 'xlsx-to-pdf',  from: 'XLSX', to: 'PDF',  accept: '.xlsx,.xls',                           engine: 'xlsx-pdf', ext: 'pdf' },
+      { id: 'html-to-pdf',  from: 'HTML', to: 'PDF',  accept: '.html,.htm,text/html',                 engine: 'html-pdf', ext: 'pdf' },
+      { id: 'rtf-to-txt',   from: 'RTF',  to: 'TXT',  accept: '.rtf',                                 engine: 'rtf-txt',  ext: 'txt' },
+      { id: 'epub-to-txt',  from: 'EPUB', to: 'TXT',  accept: '.epub',                                engine: 'epub-txt', ext: 'txt' },
+      { id: 'pdf-to-xlsx',  from: 'PDF',  to: 'XLSX', accept: '.pdf,application/pdf',                 engine: 'pdf-xlsx', ext: 'xlsx' },
     ],
   };
 
   // ── State ──────────────────────────────────────────
   const state = {
     category: 'audio',
-    converter: null,       // currently selected converter object
+    converter: null,
     files: [],
     bitrate: '192',
     ffmpeg: null,
@@ -116,48 +109,40 @@
     renderConverterGrid('audio');
     updateCounter();
     bindEvents();
-    // Select the first converter by default
     selectConverter(CONVERTERS.audio[0]);
   }
 
   // ── Events ─────────────────────────────────────────
   function bindEvents() {
-    // Category tabs
     $$('.category-tab').forEach((tab) => {
       tab.addEventListener('click', () => {
         $$('.category-tab').forEach((t) => t.classList.remove('active'));
         tab.classList.add('active');
         state.category = tab.dataset.category;
         renderConverterGrid(state.category);
-        // Select first non-coming-soon converter
-        const first = CONVERTERS[state.category].find((c) => c.engine !== 'coming-soon');
+        const first = CONVERTERS[state.category][0];
         if (first) selectConverter(first);
         else selectConverter(null);
       });
     });
 
-    // Drag & drop
     dropZone.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); dropZone.classList.add('drag-over'); });
     dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); e.stopPropagation(); dropZone.classList.remove('drag-over'); });
     dropZone.addEventListener('drop', (e) => {
       e.preventDefault();
       e.stopPropagation();
       dropZone.classList.remove('drag-over');
-      if (state.converter && state.converter.engine !== 'coming-soon') {
-        addFiles(Array.from(e.dataTransfer.files));
-      }
+      if (state.converter) addFiles(Array.from(e.dataTransfer.files));
     });
     dropZone.addEventListener('click', () => {
-      if (state.converter && state.converter.engine !== 'coming-soon') fileInput.click();
+      if (state.converter) fileInput.click();
     });
 
-    // File input
     fileInput.addEventListener('change', (e) => {
       addFiles(Array.from(e.target.files));
       fileInput.value = '';
     });
 
-    // Bitrate buttons
     $$('.bitrate-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
         $$('.bitrate-btn').forEach((b) => b.classList.remove('active'));
@@ -166,10 +151,8 @@
       });
     });
 
-    // Convert button
     convertBtn.addEventListener('click', startConversion);
 
-    // FAQ accordions
     $$('.faq-question').forEach((btn) => {
       btn.addEventListener('click', () => {
         const item = btn.closest('.faq-item');
@@ -187,19 +170,13 @@
 
     converters.forEach((conv) => {
       const card = document.createElement('button');
-      const isComingSoon = conv.engine === 'coming-soon';
-      card.className = 'converter-card' + (isComingSoon ? ' coming-soon' : '');
+      card.className = 'converter-card';
       card.innerHTML = `
         <span class="card-from">${conv.from}</span>
         <span class="card-arrow">&rarr;</span>
         <span class="card-to">${conv.to}</span>
-        ${isComingSoon ? '<span class="card-badge">Soon</span>' : ''}
       `;
-
-      if (!isComingSoon) {
-        card.addEventListener('click', () => selectConverter(conv));
-      }
-
+      card.addEventListener('click', () => selectConverter(conv));
       converterGrid.appendChild(card);
     });
   }
@@ -209,24 +186,22 @@
     state.files = [];
     renderFileList();
 
-    // Update card active state
     converterGrid.querySelectorAll('.converter-card').forEach((card) => card.classList.remove('active'));
     if (conv) {
-      const cards = converterGrid.querySelectorAll('.converter-card:not(.coming-soon)');
-      const converters = CONVERTERS[state.category].filter((c) => c.engine !== 'coming-soon');
+      const cards = converterGrid.querySelectorAll('.converter-card');
+      const converters = CONVERTERS[state.category];
       const idx = converters.indexOf(conv);
       if (idx >= 0 && cards[idx]) cards[idx].classList.add('active');
     }
 
-    // Update drop zone
-    if (conv && conv.engine !== 'coming-soon') {
+    if (conv) {
       dropText.textContent = 'Drop your ' + conv.from + ' files here';
       dropHint.textContent = conv.from + ' files — drag & drop or click to browse';
       fileInput.accept = conv.accept;
       browseBtn.style.display = '';
     } else {
       dropText.textContent = 'Select a converter above';
-      dropHint.textContent = conv ? 'This converter is coming soon' : 'Choose a conversion type to get started';
+      dropHint.textContent = 'Choose a conversion type to get started';
       browseBtn.style.display = 'none';
     }
 
@@ -294,7 +269,6 @@
       convertCount.textContent = `${count} file${count > 1 ? 's' : ''}`;
     }
 
-    // Show/hide bitrate section
     const showBitrate = state.converter && state.converter.hasBitrate;
     bitrateSection.style.display = showBitrate ? 'block' : 'none';
   }
@@ -307,14 +281,30 @@
     const conv = state.converter;
 
     try {
+      showModal('Preparing…');
+
+      // Pre-load required engines
       if (conv.engine === 'ffmpeg') {
-        showModal('Loading the engine…');
+        showModal('Loading conversion engine…');
         await loadFFmpeg();
       } else if (conv.engine === 'heic') {
         showModal('Loading HEIC decoder…');
         await loadHeic2Any();
-      } else {
-        showModal('Preparing…');
+      } else if (conv.engine === 'img2pdf' || conv.engine === 'html-pdf' || conv.engine === 'xlsx-pdf' || conv.engine === 'mammoth') {
+        showModal('Loading PDF engine…');
+        await loadJsPdf();
+        if (conv.engine === 'mammoth') await loadMammoth();
+        if (conv.engine === 'xlsx-pdf') await loadSheetJs();
+      } else if (conv.engine === 'pdfjs' || conv.engine === 'pdf-text' || conv.engine === 'pdf-xlsx') {
+        showModal('Loading PDF reader…');
+        await loadPdfJs();
+        if (conv.engine === 'pdf-text' && conv.ext === 'docx') await loadJSZip();
+        if (conv.engine === 'pdf-xlsx') await loadSheetJs();
+      } else if (conv.engine === 'sheetjs') {
+        showModal('Loading spreadsheet engine…');
+        await loadSheetJs();
+      } else if (conv.engine === 'epub-txt') {
+        await loadJSZip();
       }
 
       const results = [];
@@ -323,23 +313,18 @@
       for (let i = 0; i < total; i++) {
         const file = state.files[i];
         const pct = Math.round((i / total) * 100);
-        updateModal('Converting with care…', pct, `${file.name} (${i + 1}/${total})`);
+        updateModal('Converting…', pct, `${file.name} (${i + 1}/${total})`);
 
-        let result;
-        if (conv.engine === 'ffmpeg') {
-          result = await convertWithFFmpeg(file, conv, i);
-        } else if (conv.engine === 'canvas') {
-          result = await convertWithCanvas(file, conv);
-        } else if (conv.engine === 'heic') {
-          result = await convertWithHeic(file, conv);
+        const result = await convertFile(file, conv, i);
+        if (result) {
+          if (Array.isArray(result)) results.push(...result);
+          else results.push(result);
         }
-
-        if (result) results.push(result);
-        updateModal('Converting with care…', Math.round(((i + 1) / total) * 100), `${file.name} (${i + 1}/${total})`);
+        updateModal('Converting…', Math.round(((i + 1) / total) * 100), `${file.name} (${i + 1}/${total})`);
       }
 
-      updateModal('Preparing your files…', 100, '');
-      await delay(400);
+      updateModal('Preparing download…', 100, '');
+      await delay(300);
 
       if (results.length === 1) {
         downloadBlob(results[0].blob, results[0].name);
@@ -347,12 +332,10 @@
         await downloadAsZip(results);
       }
 
-      // Update counter
       state.conversionCount += results.length;
       localStorage.setItem('spiced_conversions', String(state.conversionCount));
       updateCounter();
 
-      // Reset files
       state.files = [];
       renderFileList();
       updateUI();
@@ -361,7 +344,7 @@
       console.error('Conversion error:', err);
       let msg = 'Something went wrong. ';
       if (typeof SharedArrayBuffer === 'undefined' && conv.engine === 'ffmpeg') {
-        msg = 'Your browser needs special headers for this conversion. Please make sure the site is served with proper COEP/COOP headers, or try a different browser.';
+        msg = 'Your browser needs special headers (COEP/COOP) for audio/video conversion. Try a different browser or check the site headers.';
       } else if (err.message) {
         msg += err.message;
       } else {
@@ -375,15 +358,38 @@
     convertBtn.disabled = false;
   }
 
+  // ── Conversion Router ──────────────────────────────
+  async function convertFile(file, conv, index) {
+    switch (conv.engine) {
+      case 'ffmpeg':    return convertWithFFmpeg(file, conv, index);
+      case 'canvas':    return convertWithCanvas(file, conv);
+      case 'heic':      return convertWithHeic(file, conv);
+      case 'img2pdf':   return convertImg2Pdf(file, conv);
+      case 'pdfjs':     return convertPdfToImage(file, conv);
+      case 'pdf-text':  return convertPdfToText(file, conv);
+      case 'pdf-xlsx':  return convertPdfToXlsx(file, conv);
+      case 'ico':       return convertPngToIco(file, conv);
+      case 'mammoth':   return convertDocxToPdf(file, conv);
+      case 'sheetjs':   return convertCsvToXlsx(file, conv);
+      case 'json-csv':  return convertJsonToCsv(file, conv);
+      case 'xlsx-pdf':  return convertXlsxToPdf(file, conv);
+      case 'html-pdf':  return convertHtmlToPdf(file, conv);
+      case 'rtf-txt':   return convertRtfToTxt(file, conv);
+      case 'epub-txt':  return convertEpubToTxt(file, conv);
+      default:
+        throw new Error('Unsupported conversion type');
+    }
+  }
+
   // ── Engine: FFmpeg ─────────────────────────────────
   async function loadFFmpeg() {
     if (state.ffmpegLoaded) return;
 
     if (typeof FFmpeg === 'undefined') {
-      await loadScript('https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js');
     }
     if (typeof FFmpegUtil === 'undefined') {
-      await loadScript('https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/util.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/util.js');
     }
 
     const { FFmpeg: FFmpegClass } = FFmpeg;
@@ -392,7 +398,7 @@
     state.fetchFile = fetchFile;
     state.ffmpeg = new FFmpegClass();
 
-    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
+    const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
 
     await state.ffmpeg.load({
       coreURL: `${baseURL}/ffmpeg-core.js`,
@@ -412,36 +418,24 @@
 
     const args = ['-i', inputName];
 
-    // GIF output (from video)
     if (conv.isGif) {
       args.push('-vf', 'fps=10,scale=480:-1:flags=lanczos', '-t', '10', outputName);
       await ffmpeg.exec(args);
-    }
-    // GIF input (to video)
-    else if (conv.gifInput) {
+    } else if (conv.gifInput) {
       args.push('-movflags', 'faststart', '-pix_fmt', 'yuv420p', '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', outputName);
       await ffmpeg.exec(args);
-    }
-    // Video-to-video conversion
-    else if (conv.videoCodec) {
+    } else if (conv.videoCodec) {
       if (conv.compress) {
         args.push('-vcodec', 'libx264', '-crf', '28', '-preset', 'fast');
       } else {
         args.push('-vcodec', conv.videoCodec);
       }
-      args.push('-acodec', conv.audioCodec);
-      args.push(outputName);
+      args.push('-acodec', conv.audioCodec, outputName);
       await ffmpeg.exec(args);
-    }
-    // Audio extraction / audio-to-audio
-    else {
-      if (conv.hasBitrate) {
-        args.push('-b:a', `${state.bitrate}k`);
-      }
+    } else {
+      if (conv.hasBitrate) args.push('-b:a', `${state.bitrate}k`);
       args.push('-acodec', conv.codec);
-      if (conv.noVideo) {
-        args.push('-vn');
-      }
+      if (conv.noVideo) args.push('-vn');
       args.push(outputName);
       await ffmpeg.exec(args);
     }
@@ -466,7 +460,6 @@
         canvas.height = img.naturalHeight;
         const ctx = canvas.getContext('2d');
 
-        // White background for JPEG (no transparency)
         if (conv.outputMime === 'image/jpeg') {
           ctx.fillStyle = '#FFFFFF';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -490,13 +483,11 @@
         reject(new Error('Could not load image file'));
       };
 
-      // For SVG, read as text and create a data URL to ensure proper rendering
       if (file.type === 'image/svg+xml' || file.name.endsWith('.svg')) {
         const reader = new FileReader();
         reader.onload = () => {
-          const svgText = reader.result;
-          const blob = new Blob([svgText], { type: 'image/svg+xml' });
-          img.src = URL.createObjectURL(blob);
+          const svgBlob = new Blob([reader.result], { type: 'image/svg+xml' });
+          img.src = URL.createObjectURL(svgBlob);
         };
         reader.readAsText(file);
       } else {
@@ -508,21 +499,499 @@
   // ── Engine: HEIC ───────────────────────────────────
   async function loadHeic2Any() {
     if (typeof heic2any === 'undefined') {
-      await loadScript('https://unpkg.com/heic2any@0.0.4/dist/heic2any.min.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js');
     }
   }
 
   async function convertWithHeic(file, conv) {
-    const resultBlob = await heic2any({
-      blob: file,
-      toType: conv.outputMime,
-      quality: 0.92,
-    });
-
-    // heic2any may return a single blob or array
+    const resultBlob = await heic2any({ blob: file, toType: conv.outputMime, quality: 0.92 });
     const blob = Array.isArray(resultBlob) ? resultBlob[0] : resultBlob;
     const baseName = file.name.replace(/\.[^/.]+$/, '');
     return { blob, name: `${baseName}.${conv.ext}` };
+  }
+
+  // ── Engine: Image to PDF (jsPDF) ───────────────────
+  async function loadJsPdf() {
+    if (typeof jspdf === 'undefined' && typeof jsPDF === 'undefined') {
+      await loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js');
+    }
+  }
+
+  async function convertImg2Pdf(file, conv) {
+    const JsPDF = (typeof jspdf !== 'undefined') ? jspdf.jsPDF : jsPDF;
+
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const w = img.naturalWidth;
+        const h = img.naturalHeight;
+        const orientation = w > h ? 'l' : 'p';
+        const doc = new JsPDF({ orientation, unit: 'px', format: [w, h] });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+        doc.addImage(dataUrl, 'JPEG', 0, 0, w, h);
+        const pdfBlob = doc.output('blob');
+
+        URL.revokeObjectURL(img.src);
+        const baseName = file.name.replace(/\.[^/.]+$/, '');
+        resolve({ blob: pdfBlob, name: `${baseName}.pdf` });
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(img.src);
+        reject(new Error('Could not load image'));
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  // ── Engine: PDF to Image (pdf.js) ──────────────────
+  async function loadPdfJs() {
+    if (typeof pdfjsLib === 'undefined') {
+      await loadScript('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    }
+  }
+
+  async function convertPdfToImage(file, conv) {
+    const arrayBuf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuf }).promise;
+    const results = [];
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const scale = 2;
+      const viewport = page.getViewport({ scale });
+      const canvas = document.createElement('canvas');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      const ctx = canvas.getContext('2d');
+
+      if (conv.outputMime === 'image/jpeg') {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      await page.render({ canvasContext: ctx, viewport }).promise;
+
+      const blob = await new Promise((res) => canvas.toBlob(res, conv.outputMime, 0.92));
+      const baseName = file.name.replace(/\.[^/.]+$/, '');
+      const suffix = pdf.numPages > 1 ? `_page${i}` : '';
+      results.push({ blob, name: `${baseName}${suffix}.${conv.ext}` });
+    }
+
+    return results;
+  }
+
+  // ── Engine: PDF to Text/HTML/DOCX ──────────────────
+  async function extractPdfText(file) {
+    const arrayBuf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuf }).promise;
+    const pages = [];
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const text = content.items.map((item) => item.str).join(' ');
+      pages.push(text);
+    }
+
+    return pages;
+  }
+
+  async function convertPdfToText(file, conv) {
+    const pages = await extractPdfText(file);
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+
+    if (conv.ext === 'txt') {
+      const text = pages.join('\n\n--- Page Break ---\n\n');
+      const blob = new Blob([text], { type: 'text/plain' });
+      return { blob, name: `${baseName}.txt` };
+    }
+
+    if (conv.ext === 'html') {
+      const htmlContent = pages.map((p, i) =>
+        `<div class="page"><h2>Page ${i + 1}</h2><p>${escapeHtml(p)}</p></div>`
+      ).join('\n');
+      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${escapeHtml(baseName)}</title><style>body{font-family:sans-serif;max-width:800px;margin:2em auto;padding:0 1em}.page{margin-bottom:2em;padding-bottom:1em;border-bottom:1px solid #ccc}</style></head><body>${htmlContent}</body></html>`;
+      const blob = new Blob([html], { type: 'text/html' });
+      return { blob, name: `${baseName}.html` };
+    }
+
+    if (conv.ext === 'docx') {
+      return createDocxFromText(pages, baseName);
+    }
+
+    throw new Error('Unsupported PDF output format');
+  }
+
+  async function createDocxFromText(pages, baseName) {
+    if (typeof JSZip === 'undefined') await loadJSZip();
+    const zip = new JSZip();
+
+    const paragraphs = pages.map((pageText) =>
+      pageText.split(/\n/).map((line) =>
+        `<w:p><w:r><w:t xml:space="preserve">${escapeXml(line)}</w:t></w:r></w:p>`
+      ).join('')
+    ).join('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
+
+    zip.file('[Content_Types].xml',
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+      '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+      '<Default Extension="xml" ContentType="application/xml"/>' +
+      '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+      '</Types>');
+
+    zip.file('_rels/.rels',
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+      '</Relationships>');
+
+    zip.file('word/_rels/document.xml.rels',
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>');
+
+    zip.file('word/document.xml',
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+      '<w:body>' + paragraphs + '</w:body></w:document>');
+
+    const blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    return { blob, name: `${baseName}.docx` };
+  }
+
+  // ── Engine: PDF to XLSX ────────────────────────────
+  async function convertPdfToXlsx(file, conv) {
+    const pages = await extractPdfText(file);
+    const wb = XLSX.utils.book_new();
+
+    pages.forEach((pageText, i) => {
+      const rows = pageText.split(/\n/).filter((r) => r.trim()).map((line) => line.split(/\t|  +/));
+      const ws = XLSX.utils.aoa_to_sheet(rows);
+      XLSX.utils.book_append_sheet(wb, ws, `Page ${i + 1}`);
+    });
+
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+    return { blob, name: `${baseName}.xlsx` };
+  }
+
+  // ── Engine: DOCX/DOC to PDF (Mammoth + jsPDF) ─────
+  async function loadMammoth() {
+    if (typeof mammoth === 'undefined') {
+      await loadScript('https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js');
+    }
+  }
+
+  async function convertDocxToPdf(file, conv) {
+    const JsPDF = (typeof jspdf !== 'undefined') ? jspdf.jsPDF : jsPDF;
+    const arrayBuf = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer: arrayBuf });
+    const text = result.value;
+
+    const doc = new JsPDF({ unit: 'mm', format: 'a4' });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const maxWidth = pageWidth - margin * 2;
+    const lineHeight = 6;
+    let y = margin;
+
+    const lines = doc.splitTextToSize(text, maxWidth);
+    for (const line of lines) {
+      if (y > doc.internal.pageSize.getHeight() - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += lineHeight;
+    }
+
+    const pdfBlob = doc.output('blob');
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+    return { blob: pdfBlob, name: `${baseName}.pdf` };
+  }
+
+  // ── Engine: PNG to ICO ─────────────────────────────
+  async function convertPngToIco(file, conv) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const sizes = [16, 32, 48];
+        const images = [];
+
+        for (const size of sizes) {
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, size, size);
+          const imageData = ctx.getImageData(0, 0, size, size);
+          images.push({ size, data: imageData });
+        }
+
+        const icoBlob = createIcoBlob(images);
+        URL.revokeObjectURL(img.src);
+        const baseName = file.name.replace(/\.[^/.]+$/, '');
+        resolve({ blob: icoBlob, name: `${baseName}.ico` });
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(img.src);
+        reject(new Error('Could not load image'));
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  function createIcoBlob(images) {
+    const headerSize = 6;
+    const dirEntrySize = 16;
+    let offset = headerSize + dirEntrySize * images.length;
+    const buffers = [];
+
+    // ICO header
+    const header = new ArrayBuffer(headerSize);
+    const hv = new DataView(header);
+    hv.setUint16(0, 0, true);     // reserved
+    hv.setUint16(2, 1, true);     // ICO type
+    hv.setUint16(4, images.length, true);
+    buffers.push(header);
+
+    const bmpDataBuffers = [];
+    for (const img of images) {
+      const bmpInfoSize = 40;
+      const pixelDataSize = img.size * img.size * 4;
+      const totalSize = bmpInfoSize + pixelDataSize;
+
+      // Directory entry
+      const entry = new ArrayBuffer(dirEntrySize);
+      const ev = new DataView(entry);
+      ev.setUint8(0, img.size < 256 ? img.size : 0);
+      ev.setUint8(1, img.size < 256 ? img.size : 0);
+      ev.setUint8(2, 0);
+      ev.setUint8(3, 0);
+      ev.setUint16(4, 1, true);
+      ev.setUint16(6, 32, true);
+      ev.setUint32(8, totalSize, true);
+      ev.setUint32(12, offset, true);
+      buffers.push(entry);
+
+      // BMP data
+      const bmpBuf = new ArrayBuffer(totalSize);
+      const bv = new DataView(bmpBuf);
+      bv.setUint32(0, bmpInfoSize, true);
+      bv.setInt32(4, img.size, true);
+      bv.setInt32(8, img.size * 2, true);
+      bv.setUint16(12, 1, true);
+      bv.setUint16(14, 32, true);
+      bv.setUint32(16, 0, true);
+      bv.setUint32(20, pixelDataSize, true);
+
+      const pixels = new Uint8Array(bmpBuf, bmpInfoSize);
+      const src = img.data.data;
+      for (let y = img.size - 1; y >= 0; y--) {
+        for (let x = 0; x < img.size; x++) {
+          const si = (y * img.size + x) * 4;
+          const di = ((img.size - 1 - y) * img.size + x) * 4;
+          pixels[di] = src[si + 2];     // B
+          pixels[di + 1] = src[si + 1]; // G
+          pixels[di + 2] = src[si];     // R
+          pixels[di + 3] = src[si + 3]; // A
+        }
+      }
+
+      bmpDataBuffers.push(bmpBuf);
+      offset += totalSize;
+    }
+
+    buffers.push(...bmpDataBuffers);
+    const totalLen = buffers.reduce((sum, b) => sum + b.byteLength, 0);
+    const result = new Uint8Array(totalLen);
+    let pos = 0;
+    for (const buf of buffers) {
+      result.set(new Uint8Array(buf), pos);
+      pos += buf.byteLength;
+    }
+
+    return new Blob([result], { type: 'image/x-icon' });
+  }
+
+  // ── Engine: CSV to XLSX (SheetJS) ──────────────────
+  async function loadSheetJs() {
+    if (typeof XLSX === 'undefined') {
+      await loadScript('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js');
+    }
+  }
+
+  async function convertCsvToXlsx(file, conv) {
+    const text = await file.text();
+    const wb = XLSX.read(text, { type: 'string' });
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+    return { blob, name: `${baseName}.xlsx` };
+  }
+
+  // ── Engine: JSON to CSV ────────────────────────────
+  async function convertJsonToCsv(file, conv) {
+    const text = await file.text();
+    const data = JSON.parse(text);
+
+    let rows;
+    if (Array.isArray(data)) {
+      rows = data;
+    } else if (typeof data === 'object') {
+      rows = [data];
+    } else {
+      throw new Error('JSON must contain an array of objects or an object');
+    }
+
+    if (rows.length === 0) throw new Error('JSON array is empty');
+
+    const headers = [...new Set(rows.flatMap((r) => Object.keys(r)))];
+    const csvLines = [headers.map(csvEscape).join(',')];
+
+    for (const row of rows) {
+      csvLines.push(headers.map((h) => csvEscape(String(row[h] ?? ''))).join(','));
+    }
+
+    const csvText = csvLines.join('\n');
+    const blob = new Blob([csvText], { type: 'text/csv' });
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+    return { blob, name: `${baseName}.csv` };
+  }
+
+  function csvEscape(val) {
+    if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+      return '"' + val.replace(/"/g, '""') + '"';
+    }
+    return val;
+  }
+
+  // ── Engine: XLSX to PDF ────────────────────────────
+  async function convertXlsxToPdf(file, conv) {
+    const JsPDF = (typeof jspdf !== 'undefined') ? jspdf.jsPDF : jsPDF;
+    const arrayBuf = await file.arrayBuffer();
+    const wb = XLSX.read(arrayBuf, { type: 'array' });
+
+    const doc = new JsPDF({ unit: 'mm', format: 'a4', orientation: 'l' });
+    const margin = 10;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    let firstSheet = true;
+
+    for (const sheetName of wb.SheetNames) {
+      if (!firstSheet) doc.addPage();
+      firstSheet = false;
+
+      const ws = wb.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      if (data.length === 0) continue;
+
+      doc.setFontSize(12);
+      doc.text(sheetName, margin, margin + 4);
+
+      const colCount = Math.max(...data.map((r) => r.length));
+      const colWidth = Math.min(40, (pageWidth - margin * 2) / colCount);
+      let y = margin + 10;
+
+      doc.setFontSize(8);
+      for (const row of data) {
+        if (y > doc.internal.pageSize.getHeight() - margin) {
+          doc.addPage();
+          y = margin;
+        }
+        for (let c = 0; c < colCount; c++) {
+          const val = String(row[c] ?? '');
+          const truncated = val.substring(0, Math.floor(colWidth / 2));
+          doc.text(truncated, margin + c * colWidth, y);
+        }
+        y += 5;
+      }
+    }
+
+    const pdfBlob = doc.output('blob');
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+    return { blob: pdfBlob, name: `${baseName}.pdf` };
+  }
+
+  // ── Engine: HTML to PDF ────────────────────────────
+  async function convertHtmlToPdf(file, conv) {
+    const JsPDF = (typeof jspdf !== 'undefined') ? jspdf.jsPDF : jsPDF;
+    const htmlText = await file.text();
+
+    // Parse HTML and extract text content
+    const parser = new DOMParser();
+    const htmlDoc = parser.parseFromString(htmlText, 'text/html');
+    const textContent = htmlDoc.body.innerText || htmlDoc.body.textContent || '';
+
+    const doc = new JsPDF({ unit: 'mm', format: 'a4' });
+    const margin = 20;
+    const maxWidth = doc.internal.pageSize.getWidth() - margin * 2;
+    const lineHeight = 6;
+    let y = margin;
+
+    const lines = doc.splitTextToSize(textContent, maxWidth);
+    for (const line of lines) {
+      if (y > doc.internal.pageSize.getHeight() - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += lineHeight;
+    }
+
+    const pdfBlob = doc.output('blob');
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+    return { blob: pdfBlob, name: `${baseName}.pdf` };
+  }
+
+  // ── Engine: RTF to TXT ─────────────────────────────
+  async function convertRtfToTxt(file, conv) {
+    const rtfText = await file.text();
+    // Strip RTF control words and groups, keep plain text
+    let text = rtfText
+      .replace(/\{\\[^{}]*\}/g, '')     // Remove groups like {\fonttbl...}
+      .replace(/\\[a-z]+\d*\s?/gi, '')  // Remove control words like \par, \b0
+      .replace(/[{}]/g, '')              // Remove remaining braces
+      .replace(/\r\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+
+    const blob = new Blob([text], { type: 'text/plain' });
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+    return { blob, name: `${baseName}.txt` };
+  }
+
+  // ── Engine: EPUB to TXT ────────────────────────────
+  async function convertEpubToTxt(file, conv) {
+    const arrayBuf = await file.arrayBuffer();
+    const zip = await JSZip.loadAsync(arrayBuf);
+
+    const textParts = [];
+    const parser = new DOMParser();
+
+    for (const [path, zipEntry] of Object.entries(zip.files)) {
+      if (path.endsWith('.html') || path.endsWith('.xhtml') || path.endsWith('.htm')) {
+        const html = await zipEntry.async('string');
+        const doc = parser.parseFromString(html, 'text/html');
+        const text = doc.body.innerText || doc.body.textContent || '';
+        if (text.trim()) textParts.push(text.trim());
+      }
+    }
+
+    const fullText = textParts.join('\n\n--- ---\n\n');
+    const blob = new Blob([fullText], { type: 'text/plain' });
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+    return { blob, name: `${baseName}.txt` };
   }
 
   // ── Download Helpers ───────────────────────────────
@@ -537,10 +1006,14 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  async function downloadAsZip(results) {
+  async function loadJSZip() {
     if (typeof JSZip === 'undefined') {
-      await loadScript('https://unpkg.com/jszip@3.10.1/dist/jszip.min.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js');
     }
+  }
+
+  async function downloadAsZip(results) {
+    await loadJSZip();
     const zip = new JSZip();
     results.forEach((r) => zip.file(r.name, r.blob));
     const content = await zip.generateAsync({ type: 'blob' });
@@ -565,12 +1038,11 @@
     modalOverlay.hidden = true;
   }
 
-  // ── Counter (grows daily by ~147) ──────────────────
+  // ── Counter ────────────────────────────────────────
   function updateCounter() {
     const baseCount = 12847;
     const baseDate = new Date('2025-01-01T00:00:00');
     const now = new Date();
-    // Fractional days since launch — counter grows smoothly
     const daysSince = (now - baseDate) / 86400000;
     const dailyRate = 147;
     const communityCount = Math.floor(daysSince * dailyRate);
@@ -591,6 +1063,10 @@
     return div.innerHTML;
   }
 
+  function escapeXml(text) {
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -606,6 +1082,8 @@
 
   function loadScript(src) {
     return new Promise((resolve, reject) => {
+      const existing = document.querySelector(`script[src="${src}"]`);
+      if (existing) { resolve(); return; }
       const script = document.createElement('script');
       script.src = src;
       script.crossOrigin = 'anonymous';

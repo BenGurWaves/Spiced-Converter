@@ -208,19 +208,20 @@ body {
 
 .converter-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
 }
 
 .converter-card {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  background: rgba(239, 217, 199, 0.2);
-  border: 1.5px solid rgba(134, 55, 62, 0.08);
-  border-radius: var(--radius);
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 10px;
+  background: rgba(239, 217, 199, 0.15);
+  border: 1.5px solid rgba(134, 55, 62, 0.06);
+  border-radius: 10px;
   cursor: pointer;
   transition: all var(--transition);
   overflow: hidden;
@@ -248,47 +249,24 @@ body {
   color: var(--golden);
 }
 
-.converter-card.coming-soon {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.converter-card.coming-soon:hover {
-  transform: none;
-  box-shadow: none;
-  background: rgba(239, 217, 199, 0.2);
-  border-color: rgba(134, 55, 62, 0.08);
-}
-
 .card-from {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
 }
 
 .card-arrow {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--burgundy);
   flex-shrink: 0;
+  opacity: 0.6;
 }
 
 .card-to {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--burgundy);
   letter-spacing: 0.3px;
-}
-
-.card-badge {
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  font-size: 8px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--brown);
-  opacity: 0.5;
 }
 
 /* ============================================
@@ -902,8 +880,8 @@ body {
   }
 
   .converter-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
   }
 
   .steps {
