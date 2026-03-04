@@ -1,0 +1,11 @@
+/*
+  Spiced Converter — Cloudflare Pages Headers
+  FFmpeg WASM requires SharedArrayBuffer, which needs these security headers.
+*/
+
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: interest-cohort=()
