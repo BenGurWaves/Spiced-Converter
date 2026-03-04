@@ -385,14 +385,14 @@
   async function loadFFmpeg() {
     if (state.ffmpegLoaded) return;
 
-    if (typeof FFmpeg === 'undefined') {
+    if (typeof FFmpegWASM === 'undefined') {
       await loadScript('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js');
     }
     if (typeof FFmpegUtil === 'undefined') {
-      await loadScript('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/util.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js');
     }
 
-    const { FFmpeg: FFmpegClass } = FFmpeg;
+    const { FFmpeg: FFmpegClass } = FFmpegWASM;
     const { fetchFile } = FFmpegUtil;
 
     state.fetchFile = fetchFile;
@@ -475,7 +475,7 @@
             resolve({ blob, name: `${baseName}.${conv.ext}` });
           },
           conv.outputMime,
-          0.92
+          1.0
         );
       };
       img.onerror = () => {
@@ -504,7 +504,7 @@
   }
 
   async function convertWithHeic(file, conv) {
-    const resultBlob = await heic2any({ blob: file, toType: conv.outputMime, quality: 0.92 });
+    const resultBlob = await heic2any({ blob: file, toType: conv.outputMime, quality: 1.0 });
     const blob = Array.isArray(resultBlob) ? resultBlob[0] : resultBlob;
     const baseName = file.name.replace(/\.[^/.]+$/, '');
     return { blob, name: `${baseName}.${conv.ext}` };
@@ -535,7 +535,7 @@
         ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(0, 0, w, h);
         ctx.drawImage(img, 0, 0);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+        const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
 
         doc.addImage(dataUrl, 'JPEG', 0, 0, w, h);
         const pdfBlob = doc.output('blob');
@@ -581,7 +581,7 @@
 
       await page.render({ canvasContext: ctx, viewport }).promise;
 
-      const blob = await new Promise((res) => canvas.toBlob(res, conv.outputMime, 0.92));
+      const blob = await new Promise((res) => canvas.toBlob(res, conv.outputMime, 1.0));
       const baseName = file.name.replace(/\.[^/.]+$/, '');
       const suffix = pdf.numPages > 1 ? `_page${i}` : '';
       results.push({ blob, name: `${baseName}${suffix}.${conv.ext}` });
