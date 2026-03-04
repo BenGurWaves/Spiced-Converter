@@ -39,6 +39,7 @@ body {
   font-weight: 400;
   color: var(--dark);
   background-color: var(--cream);
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(239, 217, 199, 0.3) 0%, transparent 60%);
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -75,8 +76,12 @@ body {
 
 .logo-group {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  flex-shrink: 0;
 }
 
 .logo {
@@ -169,7 +174,7 @@ body {
 .main {
   max-width: 800px;
   margin: 0 auto;
-  padding: 150px 24px 80px;
+  padding: 160px 24px 96px;
 }
 
 /* ============================================
@@ -177,26 +182,26 @@ body {
    ============================================ */
 .hero {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
 }
 
 .hero-title {
   font-family: var(--font-serif);
-  font-size: clamp(28px, 5vw, 44px);
+  font-size: clamp(32px, 6vw, 52px);
   font-weight: 300;
-  line-height: 1.25;
+  line-height: 1.2;
   color: var(--dark);
-  letter-spacing: -0.5px;
-  margin-bottom: 14px;
+  letter-spacing: -0.8px;
+  margin-bottom: 16px;
 }
 
 .hero-subtitle {
-  font-size: 17px;
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--burgundy);
-  letter-spacing: 2px;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  opacity: 0.8;
+  opacity: 0.6;
 }
 
 /* ============================================
@@ -208,19 +213,20 @@ body {
 
 .converter-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
 }
 
 .converter-card {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  background: rgba(239, 217, 199, 0.2);
-  border: 1.5px solid rgba(134, 55, 62, 0.08);
-  border-radius: var(--radius);
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 10px;
+  background: rgba(239, 217, 199, 0.15);
+  border: 1.5px solid rgba(134, 55, 62, 0.06);
+  border-radius: 10px;
   cursor: pointer;
   transition: all var(--transition);
   overflow: hidden;
@@ -237,7 +243,8 @@ body {
   background: var(--dark);
   border-color: var(--dark);
   color: var(--cream);
-  box-shadow: 0 4px 20px rgba(23, 34, 43, 0.2);
+  box-shadow: 0 4px 16px rgba(23, 34, 43, 0.18);
+  transform: translateY(-1px);
 }
 
 .converter-card.active .card-arrow {
@@ -248,47 +255,24 @@ body {
   color: var(--golden);
 }
 
-.converter-card.coming-soon {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.converter-card.coming-soon:hover {
-  transform: none;
-  box-shadow: none;
-  background: rgba(239, 217, 199, 0.2);
-  border-color: rgba(134, 55, 62, 0.08);
-}
-
 .card-from {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
 }
 
 .card-arrow {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--burgundy);
   flex-shrink: 0;
+  opacity: 0.6;
 }
 
 .card-to {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--burgundy);
   letter-spacing: 0.3px;
-}
-
-.card-badge {
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  font-size: 8px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--brown);
-  opacity: 0.5;
 }
 
 /* ============================================
@@ -299,10 +283,10 @@ body {
 }
 
 .drop-zone {
-  border: 2px dashed var(--burgundy);
+  border: 1.5px dashed rgba(134, 55, 62, 0.25);
   border-radius: var(--radius-lg);
-  background: rgba(239, 217, 199, 0.18);
-  padding: 56px 32px;
+  background: rgba(239, 217, 199, 0.12);
+  padding: 64px 32px;
   text-align: center;
   cursor: pointer;
   transition: all var(--transition);
@@ -604,18 +588,18 @@ body {
    How It Works
    ============================================ */
 .how-it-works {
-  padding: 80px 0;
-  border-top: 1px solid rgba(134, 55, 62, 0.08);
+  padding: 96px 0;
+  border-top: 1px solid rgba(134, 55, 62, 0.06);
 }
 
 .section-title {
   font-family: var(--font-serif);
-  font-size: clamp(28px, 4vw, 36px);
+  font-size: clamp(24px, 3.5vw, 32px);
   font-weight: 300;
   color: var(--dark);
   text-align: center;
   margin-bottom: 56px;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
 }
 
 .steps {
@@ -662,7 +646,7 @@ body {
    FAQ
    ============================================ */
 .faq {
-  padding: 0 0 80px;
+  padding: 0 0 96px;
 }
 
 .faq-list {
@@ -735,8 +719,8 @@ body {
    Footer
    ============================================ */
 .footer {
-  border-top: 1px solid rgba(134, 55, 62, 0.08);
-  padding: 48px 24px;
+  border-top: 1px solid rgba(134, 55, 62, 0.06);
+  padding: 56px 24px;
   text-align: center;
 }
 
@@ -750,12 +734,17 @@ body {
   font-size: 18px;
   font-weight: 400;
   color: var(--dark);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
+}
+
+.footer-logo-mark {
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 
 .footer-calyvent {
@@ -770,11 +759,6 @@ body {
 .footer-calyvent:hover {
   opacity: 1;
   text-decoration: underline;
-}
-
-.footer-sep {
-  color: var(--brown);
-  opacity: 0.3;
 }
 
 .footer-counter {
@@ -902,8 +886,8 @@ body {
   }
 
   .converter-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
   }
 
   .steps {
