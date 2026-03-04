@@ -208,47 +208,44 @@ body {
    Converter Grid
    ============================================ */
 .converter-grid-wrapper {
-  margin-bottom: 36px;
+  margin-bottom: 40px;
 }
 
 .converter-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
 }
 
 .converter-card {
-  position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 6px;
-  padding: 10px 10px;
-  background: rgba(239, 217, 199, 0.15);
-  border: 1.5px solid rgba(134, 55, 62, 0.06);
-  border-radius: 10px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid rgba(68, 51, 45, 0.12);
+  border-radius: 100px;
   cursor: pointer;
   transition: all var(--transition);
-  overflow: hidden;
+  white-space: nowrap;
 }
 
 .converter-card:hover {
-  background: var(--peach);
-  border-color: rgba(134, 55, 62, 0.2);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow);
+  background: rgba(239, 217, 199, 0.35);
+  border-color: rgba(134, 55, 62, 0.18);
 }
 
 .converter-card.active {
   background: var(--dark);
   border-color: var(--dark);
   color: var(--cream);
-  box-shadow: 0 4px 16px rgba(23, 34, 43, 0.18);
-  transform: translateY(-1px);
+  box-shadow: 0 2px 12px rgba(23, 34, 43, 0.15);
 }
 
 .converter-card.active .card-arrow {
   color: var(--golden);
+  opacity: 1;
 }
 
 .converter-card.active .card-to {
@@ -258,21 +255,21 @@ body {
 .card-from {
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
 }
 
 .card-arrow {
-  font-size: 10px;
-  color: var(--burgundy);
+  font-size: 9px;
+  color: var(--brown);
   flex-shrink: 0;
-  opacity: 0.6;
+  opacity: 0.4;
 }
 
 .card-to {
   font-size: 12px;
   font-weight: 600;
   color: var(--burgundy);
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
 }
 
 /* ============================================
@@ -886,8 +883,7 @@ body {
   }
 
   .converter-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    gap: 5px;
   }
 
   .steps {
