@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫚</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'><rect x='2' y='6' width='16' height='16' rx='4' fill='%2386373E'/><rect x='14' y='10' width='16' height='16' rx='4' fill='%23F1BD78'/></svg>">
 
   <!-- JSON-LD: Organization + WebSite -->
   <script type="application/ld+json">
@@ -117,6 +117,10 @@
   <header class="header">
     <div class="header-inner">
       <div class="logo-group">
+        <svg class="logo-mark" width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="2" y="6" width="16" height="16" rx="4" fill="#86373E"/>
+          <rect x="14" y="10" width="16" height="16" rx="4" fill="#F1BD78"/>
+        </svg>
         <span class="logo">Spiced</span>
         <a href="https://calyvent.com" target="_blank" rel="noopener" class="by-calyvent">by Calyvent</a>
       </div>
@@ -139,8 +143,8 @@
 
     <!-- Hero -->
     <section class="hero">
-      <h1 class="hero-title" id="heroTitle">Convert your files with care,<br>right in your browser</h1>
-      <p class="hero-subtitle">Private. Free. Forever.</p>
+      <h1 class="hero-title" id="heroTitle">Convert anything.<br>Right in your browser.</h1>
+      <p class="hero-subtitle">Private &middot; Free &middot; Forever</p>
     </section>
 
     <!-- Converter Grid (rendered by JS) -->
@@ -159,8 +163,8 @@
             </svg>
           </div>
           <p class="drop-text" id="dropText">Drop your files here</p>
-          <p class="drop-hint" id="dropHint">Select a converter above to get started</p>
-          <label class="browse-btn" for="fileInput" id="browseBtn">or browse files</label>
+          <p class="drop-hint" id="dropHint">Select a converter above to begin</p>
+          <label class="browse-btn" for="fileInput" id="browseBtn">browse files</label>
           <input type="file" id="fileInput" multiple hidden>
         </div>
       </div>
@@ -194,18 +198,18 @@
       <div class="steps">
         <div class="step">
           <div class="step-number">1</div>
-          <h3 class="step-title">Choose your conversion</h3>
-          <p class="step-desc">Pick a category and select the exact conversion you need — audio, video, image, or document.</p>
+          <h3 class="step-title">Choose</h3>
+          <p class="step-desc">Select a category and the exact format conversion you need.</p>
         </div>
         <div class="step">
           <div class="step-number">2</div>
-          <h3 class="step-title">Drop your files</h3>
-          <p class="step-desc">Drag files into the drop zone or browse. We accept virtually any format.</p>
+          <h3 class="step-title">Drop</h3>
+          <p class="step-desc">Drag your files in or browse. We handle the rest.</p>
         </div>
         <div class="step">
           <div class="step-number">3</div>
-          <h3 class="step-title">Download instantly</h3>
-          <p class="step-desc">Files convert right in the browser and download automatically. Nothing ever leaves your device.</p>
+          <h3 class="step-title">Download</h3>
+          <p class="step-desc">Converted files download instantly. Nothing ever leaves your device.</p>
         </div>
       </div>
     </section>
@@ -247,16 +251,18 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
+        <svg class="footer-logo-mark" width="20" height="20" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="2" y="6" width="16" height="16" rx="4" fill="#86373E"/>
+          <rect x="14" y="10" width="16" height="16" rx="4" fill="#F1BD78"/>
+        </svg>
         <span>Spiced</span>
         <a href="https://calyvent.com" target="_blank" rel="noopener" class="footer-calyvent">by Calyvent</a>
-        <span class="footer-sep">·</span>
-        <span>converter.forum</span>
       </div>
       <div class="footer-counter">
         <span class="counter-dot"></span>
         <span id="conversionCounter">0</span> conversions and counting
       </div>
-      <div class="footer-note">Everything happens in your browser. Your files never leave your device.</div>
+      <div class="footer-note">Your files never leave your device.</div>
     </div>
   </footer>
 
