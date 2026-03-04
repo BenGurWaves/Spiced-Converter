@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spiced — Convert your videos to perfect audio</title>
+  <meta name="description" content="Convert videos to MP3, WAV, AAC and more — privately, freely, forever. Everything happens in your browser.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫚</text></svg>">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">Spiced</div>
+      <div class="domain">converter.forum</div>
+    </div>
+  </header>
+
+  <!-- Converter Type Navigation -->
+  <nav class="converter-nav">
+    <div class="converter-nav-inner">
+      <button class="converter-tab active" data-format="mp3" data-type="video">
+        <span class="tab-icon">🎬</span> Video to MP3
+      </button>
+      <button class="converter-tab" data-format="wav" data-type="video">
+        <span class="tab-icon">🎵</span> Video to WAV
+      </button>
+      <button class="converter-tab" data-format="mp3" data-type="audio">
+        <span class="tab-icon">🎧</span> Audio to MP3
+      </button>
+      <button class="converter-tab" data-format="aac" data-type="video">
+        <span class="tab-icon">🎶</span> Video to AAC
+      </button>
+      <button class="converter-tab" data-format="ogg" data-type="video">
+        <span class="tab-icon">🔊</span> Video to OGG
+      </button>
+      <button class="converter-tab" data-format="flac" data-type="audio">
+        <span class="tab-icon">💿</span> Audio to FLAC
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1 class="hero-title">Convert your videos to perfect audio<br>in your browser</h1>
+      <p class="hero-subtitle">Private. Free. Forever.</p>
+    </section>
+
+    <!-- Drop Zone -->
+    <section class="drop-zone-wrapper">
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-zone-content">
+          <div class="drop-icon">
+            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M28 8v32M16 20l12-12 12 12" stroke="#86373E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 40v4a4 4 0 004 4h32a4 4 0 004-4v-4" stroke="#86373E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p class="drop-text">Drop your files here</p>
+          <p class="drop-hint" id="dropHint">MP4 • MOV • M4V • any video with audio</p>
+          <label class="browse-btn" for="fileInput">or browse files</label>
+          <input type="file" id="fileInput" multiple accept="video/*,audio/*" hidden>
+        </div>
+      </div>
+    </section>
+
+    <!-- File List -->
+    <section class="file-list-wrapper" id="fileListWrapper" hidden>
+      <div class="file-list" id="fileList"></div>
+    </section>
+
+    <!-- Options -->
+    <section class="options-wrapper" id="optionsWrapper" hidden>
+      <!-- Bitrate -->
+      <div class="bitrate-section" id="bitrateSection">
+        <p class="option-label">Output quality</p>
+        <div class="bitrate-options">
+          <button class="bitrate-btn" data-bitrate="128">128 kbps<span class="bitrate-tag">Standard</span></button>
+          <button class="bitrate-btn active" data-bitrate="192">192 kbps<span class="bitrate-tag">Elegant</span></button>
+          <button class="bitrate-btn" data-bitrate="256">256 kbps<span class="bitrate-tag">High</span></button>
+          <button class="bitrate-btn" data-bitrate="320">320 kbps<span class="bitrate-tag">Premium</span></button>
+        </div>
+      </div>
+
+      <!-- Convert Button -->
+      <button class="convert-btn" id="convertBtn">
+        <span class="convert-btn-text">CONVERT</span>
+        <span class="convert-btn-count" id="convertCount"></span>
+      </button>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <h2 class="section-title">How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3 class="step-title">Drop your files</h3>
+          <p class="step-desc">Drag videos or audio files into the drop zone. We accept virtually any format.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3 class="step-title">Choose your format</h3>
+          <p class="step-desc">Pick your desired output — MP3, WAV, AAC, or more. Select quality to taste.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Download instantly</h3>
+          <p class="step-desc">Your files convert right in the browser and download automatically. Nothing ever leaves your device.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+      <h2 class="section-title">Questions & answers</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">
+            Is my data really private?
+            <span class="faq-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>Absolutely. Your files never leave your device. All conversion happens locally in your browser using WebAssembly technology. We have no servers processing your files — there is literally nowhere for them to go.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Is there a file size limit?
+            <span class="faq-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>There is no hard limit. Since everything runs in your browser, the only constraint is your device's available memory. Most modern devices handle files up to 2 GB with ease.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            What formats are supported?
+            <span class="faq-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>We support virtually all video and audio formats as input — MP4, MOV, MKV, AVI, WebM, M4V, FLAC, WAV, OGG, and many more. For output, choose from MP3, WAV, AAC, OGG, and FLAC.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Do I need to install anything?
+            <span class="faq-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>No. Spiced runs entirely in your browser. No downloads, no plugins, no sign-ups. Just open the page and start converting.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            Will this always be free?
+            <span class="faq-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. Spiced is free and always will be. Since we don't run servers to process your files, our costs are minimal. This is our gift to the internet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">converter.forum</div>
+      <div class="footer-counter">
+        <span class="counter-dot"></span>
+        <span id="conversionCounter">0</span> conversions and counting
+      </div>
+      <div class="footer-note">Everything happens in your browser. Your files never leave your device.</div>
+    </div>
+  </footer>
+
+  <!-- Progress Modal -->
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal">
+      <div class="modal-icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="20" stroke="#86373E" stroke-width="2" stroke-dasharray="4 4" class="modal-spinner"/>
+        </svg>
+      </div>
+      <p class="modal-message" id="modalMessage">Loading the engine…</p>
+      <div class="modal-progress">
+        <div class="modal-progress-bar" id="modalProgressBar"></div>
+      </div>
+      <p class="modal-file" id="modalFile"></p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
