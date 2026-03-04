@@ -267,7 +267,7 @@
   async function loadFFmpeg() {
     if (state.ffmpegLoaded) return;
 
-    // Dynamically load FFmpeg WASM from CDN
+    // Dynamically load FFmpeg WASM from CDN (crossOrigin required for COEP)
     if (typeof FFmpeg === 'undefined') {
       await loadScript('https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js');
     }
@@ -281,6 +281,8 @@
     state.fetchFile = fetchFile;
     state.ffmpeg = new FFmpegClass();
 
+    // Use single-threaded core (works without SharedArrayBuffer as fallback,
+    // and also works with COEP headers on Cloudflare Pages)
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
 
     await state.ffmpeg.load({
@@ -408,6 +410,7 @@
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = src;
+      script.crossOrigin = 'anonymous'; // Required for COEP on Cloudflare Pages
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);
