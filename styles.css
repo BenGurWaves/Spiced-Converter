@@ -168,6 +168,24 @@ body {
   border-color: var(--brown);
 }
 
+.beta-badge {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  background: var(--golden);
+  color: var(--brown);
+  padding: 2px 5px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.category-tab.active .beta-badge {
+  background: rgba(241, 189, 120, 0.25);
+  color: var(--golden);
+}
+
 /* ============================================
    Main Content
    ============================================ */
@@ -279,6 +297,24 @@ body {
   font-weight: 600;
   color: var(--burgundy);
   letter-spacing: 0.5px;
+}
+
+.converter-card-beta {
+  position: relative;
+}
+
+.card-beta-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--golden);
+}
+
+.converter-card.active .card-beta-dot {
+  background: var(--golden);
 }
 
 /* ============================================

@@ -72,7 +72,7 @@
 
   // ── State ──────────────────────────────────────────
   const state = {
-    category: 'audio',
+    category: 'image',
     converter: null,
     files: [],
     bitrate: '192',
@@ -106,10 +106,10 @@
 
   // ── Initialize ─────────────────────────────────────
   function init() {
-    renderConverterGrid('audio');
+    renderConverterGrid('image');
     updateCounter();
     bindEvents();
-    selectConverter(CONVERTERS.audio[0]);
+    selectConverter(CONVERTERS.image[0]);
   }
 
   // ── Events ─────────────────────────────────────────
@@ -164,17 +164,21 @@
   }
 
   // ── Converter Grid ─────────────────────────────────
+  const BETA_CATEGORIES = new Set(['audio', 'video']);
+
   function renderConverterGrid(category) {
     const converters = CONVERTERS[category] || [];
+    const isBeta = BETA_CATEGORIES.has(category);
     converterGrid.innerHTML = '';
 
     converters.forEach((conv) => {
       const card = document.createElement('button');
-      card.className = 'converter-card';
+      card.className = 'converter-card' + (isBeta ? ' converter-card-beta' : '');
       card.innerHTML = `
         <span class="card-from">${conv.from}</span>
         <span class="card-arrow">&rarr;</span>
         <span class="card-to">${conv.to}</span>
+        ${isBeta ? '<span class="card-beta-dot" title="Beta — may not work on all browsers"></span>' : ''}
       `;
       card.addEventListener('click', () => selectConverter(conv));
       converterGrid.appendChild(card);
