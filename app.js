@@ -401,6 +401,12 @@
 
     state.fetchFile = fetchFile;
 
+    // Pre-fetch the classWorker blob URL (needed for COEP in Firefox)
+    const classWorkerBlobURL = await toBlobURL(
+      'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/814.ffmpeg.js',
+      'text/javascript'
+    );
+
     const cdnBases = [
       'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd',
       'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd',
@@ -411,17 +417,23 @@
         state.ffmpeg = new FFmpegClass();
         const baseURL = cdnBases[attempt];
 
-        // Use toBlobURL to fetch resources as blob URLs — required for COEP
-        const loadPromise = state.ffmpeg.load({
-          coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-          wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-        });
+        // Wrap everything (downloads + load) in a single timeout
+        const loadWithTimeout = async () => {
+          const coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript');
+          const wasmURL = await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm');
+
+          await state.ffmpeg.load({
+            coreURL,
+            wasmURL,
+            classWorkerURL: classWorkerBlobURL,
+          });
+        };
 
         const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('timeout')), 60000)
+          setTimeout(() => reject(new Error('FFmpeg engine timed out. Please reload and try again.')), 120000)
         );
 
-        await Promise.race([loadPromise, timeoutPromise]);
+        await Promise.race([loadWithTimeout(), timeoutPromise]);
         state.ffmpegLoaded = true;
         return;
       } catch (e) {
