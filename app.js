@@ -397,25 +397,42 @@
     }
 
     const { FFmpeg: FFmpegClass } = FFmpegWASM;
-    const { fetchFile } = FFmpegUtil;
+    const { fetchFile, toBlobURL } = FFmpegUtil;
 
     state.fetchFile = fetchFile;
-    state.ffmpeg = new FFmpegClass();
 
-    const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+    const cdnBases = [
+      'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd',
+      'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd',
+    ];
 
-    const loadPromise = state.ffmpeg.load({
-      coreURL: `${baseURL}/ffmpeg-core.js`,
-      wasmURL: `${baseURL}/ffmpeg-core.wasm`,
-    });
+    for (let attempt = 0; attempt < cdnBases.length; attempt++) {
+      try {
+        state.ffmpeg = new FFmpegClass();
+        const baseURL = cdnBases[attempt];
 
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('FFmpeg engine timed out. Please reload and try again.')), 30000)
-    );
+        // Use toBlobURL to fetch resources as blob URLs — required for COEP
+        const loadPromise = state.ffmpeg.load({
+          coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+          wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+        });
 
-    await Promise.race([loadPromise, timeoutPromise]);
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('timeout')), 60000)
+        );
 
-    state.ffmpegLoaded = true;
+        await Promise.race([loadPromise, timeoutPromise]);
+        state.ffmpegLoaded = true;
+        return;
+      } catch (e) {
+        state.ffmpeg = null;
+        if (attempt < cdnBases.length - 1) {
+          console.warn(`FFmpeg load attempt ${attempt + 1} failed (${e.message}), trying fallback CDN…`);
+          continue;
+        }
+        throw new Error('FFmpeg engine failed to load. Please check your connection and reload the page.');
+      }
+    }
   }
 
   async function convertWithFFmpeg(file, conv, index) {
