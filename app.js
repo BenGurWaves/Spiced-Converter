@@ -385,6 +385,10 @@
   async function loadFFmpeg() {
     if (state.ffmpegLoaded) return;
 
+    if (typeof SharedArrayBuffer === 'undefined') {
+      throw new Error('Audio/video conversion requires security headers (COOP/COEP). Please reload the page or try a different browser.');
+    }
+
     if (typeof FFmpegWASM === 'undefined') {
       await loadScript('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js');
     }
@@ -400,10 +404,16 @@
 
     const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
 
-    await state.ffmpeg.load({
+    const loadPromise = state.ffmpeg.load({
       coreURL: `${baseURL}/ffmpeg-core.js`,
       wasmURL: `${baseURL}/ffmpeg-core.wasm`,
     });
+
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('FFmpeg engine timed out. Please reload and try again.')), 30000)
+    );
+
+    await Promise.race([loadPromise, timeoutPromise]);
 
     state.ffmpegLoaded = true;
   }
