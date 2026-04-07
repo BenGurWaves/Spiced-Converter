@@ -493,13 +493,13 @@
     } else {
       if (conv.hasBitrate) args.push('-b:a', `${state.bitrate}k`);
       args.push('-acodec', conv.codec);
-      if (conv.noVideo) args.push('-vn');
+      if (conv.noVideo) args.push('-vn', '-f', conv.ext);
       args.push(outputName);
       await ffmpeg.exec(args);
     }
 
     const data = await ffmpeg.readFile(outputName);
-    const blob = new Blob([data.buffer], { type: guessMime(conv.ext) });
+    const blob = new Blob([data], { type: guessMime(conv.ext) });
 
     await ffmpeg.deleteFile(inputName);
     await ffmpeg.deleteFile(outputName);
