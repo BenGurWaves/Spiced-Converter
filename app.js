@@ -123,6 +123,10 @@
         const first = CONVERTERS[state.category][0];
         if (first) selectConverter(first);
         else selectConverter(null);
+        // Pre-warm FFmpeg silently when user opens Audio or Video tab
+        if ((state.category === 'audio' || state.category === 'video') && !state.ffmpegLoaded) {
+          loadFFmpeg().catch(() => {});
+        }
       });
     });
 
@@ -164,7 +168,7 @@
   }
 
   // ── Converter Grid ─────────────────────────────────
-  const BETA_CATEGORIES = new Set(['audio', 'video']);
+  const BETA_CATEGORIES = new Set([]);
 
   function renderConverterGrid(category) {
     const converters = CONVERTERS[category] || [];
@@ -424,8 +428,18 @@
         // Wrap everything (downloads + load) in a single timeout
         const loadWithTimeout = async () => {
           const coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript');
-          const wasmURL = await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm');
+          const wasmURL = await toBlobURL(
+            `${baseURL}/ffmpeg-core.wasm`,
+            'application/wasm',
+            ({ received, total, done }) => {
+              if (!done && total > 0) {
+                const pct = Math.round((received / total) * 80);
+                updateModal(`Downloading engine… ${pct}%`, pct, 'ffmpeg-core.wasm (32 MB — one-time download)');
+              }
+            }
+          );
 
+          updateModal('Starting engine…', 85, '');
           await state.ffmpeg.load({
             coreURL,
             wasmURL,
