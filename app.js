@@ -409,27 +409,27 @@
 
     state.fetchFile = fetchFile;
 
-    // Pre-fetch the classWorker blob URL (needed for COEP in Firefox)
-    const classWorkerBlobURL = await toBlobURL(
-      'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/814.ffmpeg.js',
-      'text/javascript'
-    );
-
-    const cdnBases = [
-      'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd',
-      'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd',
+    const cdnSets = [
+      {
+        worker: 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/814.ffmpeg.js',
+        base: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd',
+      },
+      {
+        worker: 'https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/814.ffmpeg.js',
+        base: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd',
+      },
     ];
 
-    for (let attempt = 0; attempt < cdnBases.length; attempt++) {
+    for (let attempt = 0; attempt < cdnSets.length; attempt++) {
       try {
         state.ffmpeg = new FFmpegClass();
-        const baseURL = cdnBases[attempt];
+        const { worker, base } = cdnSets[attempt];
 
-        // Wrap everything (downloads + load) in a single timeout
         const loadWithTimeout = async () => {
-          const coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript');
+          const classWorkerBlobURL = await toBlobURL(worker, 'text/javascript');
+          const coreURL = await toBlobURL(`${base}/ffmpeg-core.js`, 'text/javascript');
           const wasmURL = await toBlobURL(
-            `${baseURL}/ffmpeg-core.wasm`,
+            `${base}/ffmpeg-core.wasm`,
             'application/wasm',
             true,
             ({ received, total, done }) => {
@@ -457,7 +457,7 @@
         return;
       } catch (e) {
         state.ffmpeg = null;
-        if (attempt < cdnBases.length - 1) {
+        if (attempt < cdnSets.length - 1) {
           console.warn(`FFmpeg load attempt ${attempt + 1} failed (${e.message}), trying fallback CDN…`);
           continue;
         }
