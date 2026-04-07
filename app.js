@@ -431,10 +431,11 @@
           const wasmURL = await toBlobURL(
             `${baseURL}/ffmpeg-core.wasm`,
             'application/wasm',
+            true,
             ({ received, total, done }) => {
               if (!done && total > 0) {
                 const pct = Math.round((received / total) * 80);
-                updateModal(`Downloading engine… ${pct}%`, pct, 'ffmpeg-core.wasm (32 MB — one-time download)');
+                updateModal(`Downloading engine… ${pct}%`, pct, 'One-time 32 MB download');
               }
             }
           );
